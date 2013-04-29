@@ -6,27 +6,29 @@ class Player
     @old_health ||= warrior.health
     @resting ||= false
 
+    puts warrior.listen
+
     unless rest_if_needed!
       if count_nearby{ |dir| @warrior.feel(dir).enemy? } > 1
-        act_nearby! do |dir| 
+        act_nearby! do |dir|
           if @warrior.feel(dir).enemy?
-            @warrior.bind!(dir) 
+            @warrior.bind!(dir)
             return true
           end
         end
 
       elsif count_nearby{ |dir| @warrior.feel(dir).captive? } > 0 &&
             count_nearby{ |dir| @warrior.feel(dir).enemy? } == 0
-        act_nearby! do |dir| 
+        act_nearby! do |dir|
           if @warrior.feel(dir).captive?
-            @warrior.rescue!(dir) 
+            @warrior.rescue!(dir)
             return true
           end
         end
       else
-        fight_to_stairs! unless act_nearby! do |dir| 
+        fight_to_stairs! unless act_nearby! do |dir|
           if @warrior.feel(dir).enemy?
-            @warrior.attack!(dir) 
+            @warrior.attack!(dir)
             return true
           end
         end
@@ -43,7 +45,7 @@ class Player
   def walk_toward_stairs!
     @warrior.walk!(dir_of_stairs)
   end
-  
+
   def attack_toward_stairs!
     @warrior.attack!(dir_of_stairs)
   end
